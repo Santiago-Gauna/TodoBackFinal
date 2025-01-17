@@ -5,39 +5,31 @@ import classes from "../Estilos/Estadisticas.module.css";
 import { axiosGet } from "../Api/axios";
 
 const Estadisticas = () => {
-  const [tasks, setTasks] = useState([]);
   const [Pendientes, setTasksPendientes] = useState([]);
   const [EnProceso, setTasksEnProceso] = useState([]);
   const [Completadas, setTasksCompletadas] = useState([]);
-  useEffect(
-    () => {
-      const fetchTareas = async () => {
-        try {
-          const response = await axiosGet.get("/todos");
-          const tareas = response.data.data;
-          setTasks(tareas);
 
-          setTasksPendientes(
-            tasks.filter((task) => task.status === "pendientes")
-          );
+  useEffect(() => {
+    const fetchTareas = async () => {
+      try {
+        const response = await axiosGet.get("/todos");
+        const tareas = response.data.data;
 
-          setTasksEnProceso(
-            tasks.filter((task) => task.status === "enProceso")
-          );
+        setTasksPendientes(
+          tareas.filter((task) => task.status === "pendientes")
+        );
 
-          setTasksCompletadas(
-            tasks.filter((task) => task.status === "completadas")
-          );
-        } catch (error) {
-          console.error("Error al cargar tareas:", error);
-        }
-      };
-      fetchTareas();
-    },
-    [
-      /*Pendientes, EnProceso, Completadas*/
-    ]
-  );
+        setTasksEnProceso(tareas.filter((task) => task.status === "enProceso"));
+
+        setTasksCompletadas(
+          tareas.filter((task) => task.status === "completadas")
+        );
+      } catch (error) {
+        console.error("Error al cargar tareas:", error);
+      }
+    };
+    fetchTareas();
+  }, []);
 
   return (
     <div>
